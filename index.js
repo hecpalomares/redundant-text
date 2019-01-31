@@ -4,8 +4,8 @@
 })();
 
 function modifyText() {
-  const textToClean = document.getElementById('clean-text').value.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");    // Get text-area
-  const textoToCleanArray = textToClean.split(' ').filter(w => w);                                                // Trim white space
+  const textToClean = document.getElementById('clean-text').value.replace(/[^a-zA-Z]+/g, ' ');
+  const textoToCleanArray = textToClean.split(' ').filter(w => w);
 
   for (let index = 0; index < textoToCleanArray.length; index++) {
     // Get the word and its first letter
@@ -20,12 +20,15 @@ function modifyText() {
       const redundantPhrase = redundantPhrasesArray[index];
 
       if(redundantPhrase.includes(word.toLowerCase())) {
-        // get the length of the redundantPhrase
         const redundantPhraseLength = redundantPhrase.split(' ').length;
+        const redundantPhraseComplete = redundantPhrase.replace(/[()]/g,"").toLowerCase();
+        const redundantWord = redundantPhrase.match(/\((.*)\)/).pop();
+
         const phraseToCompare = createPhraseToCompare(redundantPhraseLength, word, textoToCleanArray);
 
-        if(phraseToCompare.toLowerCase() === redundantPhrase.replace(/[()]/g,"").toLowerCase()) {
-          console.log('Detected:', phraseToCompare);
+        if(phraseToCompare.toLowerCase() === redundantPhraseComplete) {
+          console.info('Word:', redundantWord);
+          console.info('Detected:', phraseToCompare);
         }
       }
     }

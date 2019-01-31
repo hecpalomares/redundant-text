@@ -3,26 +3,20 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Redundancy Text</title>
+    <title>Redundancy Text Analyzer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
   </head>
   <body>
   <section class="section">
-    <div class="container columns">
-      <div class="column">
-          <h1 class="title">
-              Redundancy Text
-          </h1>
+    <div class="container">
+      <div class="column is-full">
+        <h1 class="title">Redundancy Text Analyzer</h1>
       </div>
-      <div class="column">
-          <p class="subtitle">
-            Analyze redundant words from your texts
-          </p>
+      <div class="column is-full">
+          <p class="is-size-5">Text to be analyzed:</p>
+          <textarea class="textarea" id="clean-text" placeholder="e.g Actual facts – A fact is by definition something that has already been confirmed to have happened. Forever and ever – Ever is completely unnecessary as it just serves as a duplicate of forever." rows="5"></textarea>
       </div>
-      <div class="column">
-          <textarea class="textarea" id="clean-text" rows="10">Cease and desist, dice.</textarea>
-      </div>
-      <div class="column">
+      <div class="column is-full">
           <a class="button is-primary m2" id="clean-button">Clean Text</a>
       </div>
     </div>
