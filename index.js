@@ -1,47 +1,71 @@
 (function() {
-  let button = document.getElementById('clean-button');
-  button.addEventListener("click", modifyText);
+  let button = document.getElementById('analyze-button');
+  button.addEventListener("click", analyzeRedundancyText);
 })();
 
-function modifyText() {
-  const textToClean = document.getElementById('clean-text').value.replace(/[^a-zA-Z]+/g, ' ');
-  const textoToCleanArray = textToClean.split(' ').filter(w => w);
-
-  for (let index = 0; index < textoToCleanArray.length; index++) {
+function analyzeRedundancyText() {
+  const originalText = document.getElementById('original-text').value.replace(/[^a-zA-Z]+/g, ' ');
+  const originalTextArray = originalText.split(' ').filter(w => w);
+  const matchedRedundantPhrases = [];
+  for (let index = 0; index < originalTextArray.length; index++) {
     // Get the word and its first letter
-    const word = textoToCleanArray[index];
+    const word = originalTextArray[index];
     const wordFirstLetter = word[0].toLowerCase();
 
      // Get the correct dictionary
-    const redundantPhrasesArray = redundantDictionary[wordFirstLetter];
-    
-    // Iterate over the correct dictionary, and compare with the full word of the text
-    for (let index = 0; index < redundantPhrasesArray.length; index++) {
-      const redundantPhrase = redundantPhrasesArray[index];
+    const redundantPhrasesDictionary = redundantDictionary[wordFirstLetter];
+    matchedRedundantPhrases.push(matchPhrases(redundantPhrasesDictionary, word, originalTextArray));
+  }
+  const matchedRedundantPhrasesFiltered = matchedRedundantPhrases.filter(w => w);
+  replaceAtOriginalText(matchedRedundantPhrasesFiltered);
+}
 
-      if(redundantPhrase.includes(word.toLowerCase())) {
-        const redundantPhraseLength = redundantPhrase.split(' ').length;
-        const redundantPhraseComplete = redundantPhrase.replace(/[()]/g,"").toLowerCase();
-        const redundantWord = redundantPhrase.match(/\((.*)\)/).pop();
+function matchPhrases(redundantPhrasesArray, word, originalTextArray) {
+  for (let index = 0; index < redundantPhrasesArray.length; index++) {
+    const redundantPhrase = redundantPhrasesArray[index];
 
-        const phraseToCompare = createPhraseToCompare(redundantPhraseLength, word, textoToCleanArray);
+    // If the word appears as a substring of a redundant phrase
+    if(redundantPhrase.includes(word.toLowerCase())) {
+      const redundantPhraseLength = redundantPhrase.split(' ').length;
+      const redundantPhraseComplete = redundantPhrase.replace(/[()]/g,"").toLowerCase();
+      const redundantPhraseClean = redundantPhrase.match(/\((.*)\)/).pop();
 
-        if(phraseToCompare.toLowerCase() === redundantPhraseComplete) {
-          console.info('Word:', redundantWord);
-          console.info('Detected:', phraseToCompare);
-        }
+      const phraseToCompare = createPhraseToCompare(redundantPhraseLength, word, originalTextArray);
+
+      // Compare that both phrases are equal
+      if(phraseToCompare.toLowerCase() === redundantPhraseComplete) {
+        // const phraseToCompareHighlighted = phraseToCompare.toLowerCase().replace(redundantPhraseClean, '<span class="highlight">'+redundantPhraseClean+'</span>');
+        const phraseToCompareHighlighted = "<span class='highlight'>"+redundantPhraseClean+'</span>'
+        return { phraseToCompareHighlighted, redundantPhraseClean }
       }
     }
   }
 }
 
-// Factorial function, construct the phrase to compare depending the redundantPhraseLength
-function createPhraseToCompare(redundantPhraseLength, word, textoToCleanArray) {
-  const index = textoToCleanArray.indexOf(word);
+function replaceAtOriginalText(matchedPhrases) {
+  let originalText = document.getElementById('original-text').value;
+  
+  for (let index = 0; index < matchedPhrases.length; index++) {
+    const phraseToReplace = matchedPhrases[index];
+    const phraseRegex = new RegExp(phraseToReplace.redundantPhraseClean,'i');
+
+    originalText = originalText.replace(phraseRegex, phraseToReplace.phraseToCompareHighlighted);
+  }
+  appendResultText(originalText);
+}
+
+// Factorial function. Construct the phrase to compare depending the original-text. Gets called 'n' times depending the redundantPhraseLength.
+function createPhraseToCompare(redundantPhraseLength, word, originalTextArray) {
+  const index = originalTextArray.indexOf(word);
 
   if(redundantPhraseLength === 1) {
     return word;
   }
 
-  return word + ' ' + createPhraseToCompare(redundantPhraseLength - 1, textoToCleanArray[index+1], textoToCleanArray)
+  return word + ' ' + createPhraseToCompare(redundantPhraseLength - 1, originalTextArray[index+1], originalTextArray)
+}
+
+function appendResultText(resultText) {
+  let resultTextContainer = document.getElementById('result-text');
+  resultTextContainer.innerHTML = resultText;
 }
