@@ -9,6 +9,18 @@
       .highlight {
         background-color: hsl(48, 100%, 67%);
       }
+      #result-text {
+        border: 1px solid lightgray;
+        padding: 12px;
+        border-radius: 4px;
+        overflow-x: auto;
+        font-size: 16px;
+        height: 250px;
+      }
+      .footer {
+        border-top: 1px solid rgb(139, 139, 139);
+        padding: 2rem 1.5rem;
+      }
     </style>
   </head>
   <body>
@@ -19,17 +31,26 @@
       </div>
       <div class="column is-full">
           <p class="is-size-5">Text to be analyzed</p>
-          <textarea class="textarea" id="original-text" placeholder="e.g Actual facts – A fact is by definition something that has already been confirmed to have happened. Forever and ever – Ever is completely unnecessary as it just serves as a duplicate of forever." rows="5">Actual facts – A fact is by definition something that has already been confirmed to have happened. Forever and ever – Ever is completely unnecessary as it just serves as a duplicate of forever. Major breakthrough – A breakthrough is already major and significant. There is no reason to say that it is major. 9:00 a.m. in the morning or 9:00 p.m. in the evening – People commonly say the time, then add a.m. or p.m. and then add in the morning or evening to the phrase. Again this is redundant due to the fact that a.m. and p.m. already informs the reader. Past history – By definition, history is someone’s past. Saying that a person “checked your past history” or “Look into his past record” is redundant since these things have already happened and are by definition an occurrence in the past. Plan ahead – When a person makes a plan, they are already preparing for the future. There is no reason to add ahead after you tell someone to plan. Postpone until later – To postpone something already means to reschedule it at a later time. The “until later” part of the phrase is unneeded. A good remedy for this phrase would be “Postpone until tomorrow morning” or something else that is more specific than later. Unexpected surprise – By definition a surprise is going to be unexpected. No one expects a surprise. Unintentional mistake – When someone makes a mistake it is already unintentional. Unintentional is unnecessary. Another common way people use this form of redundancy is with the phrase accidental mistake. Written down – You may have heard the phrase “Write this down” or “It’s written down”, but when something is written it has been taken down. There is no need for you to add the word down to it. Still remains – “Yet she still remains” this phrase is redundant because remains means that something is still there. Still doesn’t add anything to the sentence.</textarea>
+          <textarea class="textarea" rows="10" id="original-text" placeholder="e.g Actual facts – A fact is by definition something that has already been confirmed to have happened. Forever and ever – Ever is completely unnecessary as it just serves as a duplicate of forever." rows="5">Actual facts – A fact is by definition something that has already been confirmed to have happened. Forever and ever – Ever is completely unnecessary as it just serves as a duplicate of forever. Major breakthrough – A breakthrough is already major and significant. There is no reason to say that it is major. 9:00 a.m. in the morning or 9:00 p.m. in the evening – People commonly say the time, then add a.m. or p.m. and then add in the morning or evening to the phrase. Again this is redundant due to the fact that a.m. and p.m. already informs the reader. Past history – By definition, history is someone’s past. Saying that a person “checked your past history” or “Look into his past record” is redundant since these things have already happened and are by definition an occurrence in the past. Plan ahead – When a person makes a plan, they are already preparing for the future. There is no reason to add ahead after you tell someone to plan. Postpone until later – To postpone something already means to reschedule it at a later time. The “until later” part of the phrase is unneeded. A good remedy for this phrase would be “Postpone until tomorrow morning” or something else that is more specific than later. Unexpected surprise – By definition a surprise is going to be unexpected. No one expects a surprise. Unintentional mistake – When someone makes a mistake it is already unintentional. Unintentional is unnecessary. Another common way people use this form of redundancy is with the phrase accidental mistake. Written down – You may have heard the phrase “Write this down” or “It’s written down”, but when something is written it has been taken down. There is no need for you to add the word down to it. Still remains – “Yet she still remains” this phrase is redundant because remains means that something is still there. Still doesn’t add anything to the sentence.</textarea>
       </div>
       <div class="column is-full">
           <a class="button is-primary" id="analyze-button">Clean Text</a>
       </div>
       <div class="column is-full">
-        <p class="is-size-5">Result</p>
-        <div class="is-size-7" id="result-text"></div>
+        <p class="is-size-5">Analyzed Text</p>
+        <span class="is-size-6">Remove words highlighted in yellow to improve readability.</span>
+        <div id="result-text"></div>
       </div>
     </div>
   </section>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        <strong>Redundancy Text Analyzer</strong> by <a href="https://hectorpalomares.com">Héctor Palomares</a>. The source code is licensed
+        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
+      </p>
+    </div>
+  </footer>
   </body>
   <script type="text/javascript" src="words.js"></script>
   <script type="text/javascript" src="index.js"></script>

@@ -1,5 +1,5 @@
-(function() {
-  let button = document.getElementById('analyze-button');
+(function initListeners() {
+  const button = document.getElementById('analyze-button');
   button.addEventListener("click", analyzeRedundancyText);
 })();
 
@@ -7,15 +7,17 @@ function analyzeRedundancyText() {
   const originalText = document.getElementById('original-text').value.replace(/[^a-zA-Z]+/g, ' ');
   const originalTextArray = originalText.split(' ').filter(w => w);
   const matchedRedundantPhrases = [];
+  
   for (let index = 0; index < originalTextArray.length; index++) {
-    // Get the word and its first letter
+    // Get the word and the first letter of word
     const word = originalTextArray[index];
     const wordFirstLetter = word[0].toLowerCase();
 
-     // Get the correct dictionary
+     // Get the correct dictionary with O(1) access
     const redundantPhrasesDictionary = redundantDictionary[wordFirstLetter];
     matchedRedundantPhrases.push(matchPhrases(redundantPhrasesDictionary, word, originalTextArray));
   }
+  // Remove undefined/empty/null matchedPhrases
   const matchedRedundantPhrasesFiltered = matchedRedundantPhrases.filter(w => w);
   replaceAtOriginalText(matchedRedundantPhrasesFiltered);
 }
@@ -34,7 +36,6 @@ function matchPhrases(redundantPhrasesArray, word, originalTextArray) {
 
       // Compare that both phrases are equal
       if(phraseToCompare.toLowerCase() === redundantPhraseComplete) {
-        // const phraseToCompareHighlighted = phraseToCompare.toLowerCase().replace(redundantPhraseClean, '<span class="highlight">'+redundantPhraseClean+'</span>');
         const phraseToCompareHighlighted = "<span class='highlight'>"+redundantPhraseClean+'</span>'
         return { phraseToCompareHighlighted, redundantPhraseClean }
       }
@@ -48,13 +49,17 @@ function replaceAtOriginalText(matchedPhrases) {
   for (let index = 0; index < matchedPhrases.length; index++) {
     const phraseToReplace = matchedPhrases[index];
     const phraseRegex = new RegExp(phraseToReplace.redundantPhraseClean,'i');
-
     originalText = originalText.replace(phraseRegex, phraseToReplace.phraseToCompareHighlighted);
   }
   appendResultText(originalText);
 }
 
-// Factorial function. Construct the phrase to compare depending the original-text. Gets called 'n' times depending the redundantPhraseLength.
+function appendResultText(resultText) {
+  let resultTextContainer = document.getElementById('result-text');
+  resultTextContainer.innerHTML = resultText;
+}
+
+// Recursive function. Construct the phrase to compare depending the original-text. Gets called 'n' times depending the redundantPhraseLength.
 function createPhraseToCompare(redundantPhraseLength, word, originalTextArray) {
   const index = originalTextArray.indexOf(word);
 
@@ -63,9 +68,4 @@ function createPhraseToCompare(redundantPhraseLength, word, originalTextArray) {
   }
 
   return word + ' ' + createPhraseToCompare(redundantPhraseLength - 1, originalTextArray[index+1], originalTextArray)
-}
-
-function appendResultText(resultText) {
-  let resultTextContainer = document.getElementById('result-text');
-  resultTextContainer.innerHTML = resultText;
 }
