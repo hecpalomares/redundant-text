@@ -3,18 +3,24 @@
   button.addEventListener("click", analyzeRedundancyText);
 })();
 
+function setLanguage() {
+  const select = document.getElementById('select-lang');
+  return select.selectedOptions[0].value;
+}
+
 function analyzeRedundancyText() {
-  const originalText = document.getElementById('original-text').value.replace(/[^a-zA-Z]+/g, ' ');
+  const originalText = document.getElementById('original-text').value.replace(/[^a-zA-Z-]+/g, ' ');
   const originalTextArray = originalText.split(' ').filter(w => w);
   const matchedRedundantPhrases = [];
-  
+  const lang = setLanguage();
+
   for (let index = 0; index < originalTextArray.length; index++) {
     // Get the word and the first letter of word
     const word = originalTextArray[index];
     const wordFirstLetter = word[0].toLowerCase();
 
-     // Get the correct dictionary with O(1) access
-    const redundantPhrasesDictionary = redundantDictionary[wordFirstLetter];
+    // Get the correct dictionary with O(1) access
+    const redundantPhrasesDictionary = redundantDictionary[lang][wordFirstLetter];
     matchedRedundantPhrases.push(matchPhrases(redundantPhrasesDictionary, word, originalTextArray));
   }
   // Remove undefined/empty/null matchedPhrases
@@ -31,7 +37,6 @@ function matchPhrases(redundantPhrasesArray, word, originalTextArray) {
       const redundantPhraseLength = redundantPhrase.split(' ').length;
       const redundantPhraseComplete = redundantPhrase.replace(/[()]/g,"").toLowerCase();
       const redundantPhraseClean = redundantPhrase.match(/\((.*)\)/).pop();
-
       const phraseToCompare = createPhraseToCompare(redundantPhraseLength, word, originalTextArray);
 
       // Compare that both phrases are equal
